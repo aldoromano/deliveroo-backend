@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const axios = require("axios");
+
 require("dotenv").config();
 
 const app = express();
@@ -430,9 +432,24 @@ app.get("/", (req, res) => {
 //   });
 // }
 
+app.get("/reality", async (req, res) => {
+  console.log("Reality");
+
+  try {
+    const response = await axios.get(
+      "https://lereacteur-bootcamp-api.herokuapp.com/api/deliveroo/menu/paris/3eme-temple/sub-arc-subway-rambuteau?day=today&geohash=u09wj8rk5bqr&time=ASAP"
+    );
+
+    return res.json(response);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 app.all("*", (req, res) => {
   res.status(404).json({ message: "Page not found" });
 });
+
 app.listen(process.env.PORT || 3200, () => {
   console.log("Server started");
 });
